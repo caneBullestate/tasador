@@ -75,13 +75,9 @@ precio,nivel,nrcomp,links=tb.calcularTasacion(tasacion[0],tasacion[1],float(lat)
 
 actualizarActividad()
 
-print("actividad actualizada")
 
-try:
-    sm.sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas)
-except Exception as e:
-    print(e)
+sm.sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas)
 
-print("mail enviado")
+
 
 
