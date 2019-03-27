@@ -64,6 +64,10 @@ class PedidosController < ApplicationController
     end
   end
 
+  def formulario_tasador
+    @pedido = Pedido.new
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_pedido
