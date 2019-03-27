@@ -70,13 +70,13 @@ if tasacion[4] is None:
 
 lat,lon = gm.getCoordsWithAdress(direccion)
 
-precio,nivel,nrcomp,links=tb.calcularTasacion(tasacion[0],tasacion[1],float(lat),float(lon),float(minmet),float(maxmet),int(piezas),int(tasacion[5]),int(estacionamientos))
+precio,nivel,nrcomp,links,es_venta=tb.calcularTasacion(tasacion[0],tasacion[1],float(lat),float(lon),float(minmet),float(maxmet),int(piezas),int(tasacion[5]),int(estacionamientos))
 
 
 actualizarActividad()
 
 
-sm.sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas,lat,lon,direccion)
+sm.sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas,lat,lon,direccion,es_venta)
 
 
 
