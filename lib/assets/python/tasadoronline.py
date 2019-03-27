@@ -27,7 +27,7 @@ def actualizarActividad():
 
 def actualizarMail():
 
-    sql = "UPDATE pedidos SET mail='0' WHERE mail='sergei@bullestate.cl'"
+    sql = "UPDATE pedidos SET mail='0' WHERE mail='sergei@bullestate.cl' OR mail='jgonzalez@goharvest.cl' OR mail='demianschkolnik@gmail.com'"
 
     mariadb_connection = mysql.connect(user='root', password='sergei', host='127.0.0.1', database='railstest')
     cur = mariadb_connection.cursor()

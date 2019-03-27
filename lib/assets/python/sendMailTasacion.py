@@ -4,7 +4,7 @@ from email.mime.text import  MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-def sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas):
+def sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas,lat,lon,direccion):
     to=tasacion[10]
     cliente=tasacion[9]
     fromaddr = "contacto@bullestate.cl"
@@ -46,6 +46,8 @@ def sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxm
     body+="\n\n"
     body+="El precio tasado es UF " + str(precio)+", con un nivel de confianza: "+str(nivel)+\
                                    ", tasación realizada comparandose con "+str(nrcomp)+" propiedades."
+    body+="\n\n"
+    body+="lat: "+str(lat)+" lon: "+str(lon)+" direccion: "+str(direccion)+"."
 
     msg.attach(MIMEText(body, 'plain'))
 
