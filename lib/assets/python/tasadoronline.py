@@ -76,7 +76,7 @@ precio,nivel,nrcomp,links=tb.calcularTasacion(tasacion[0],tasacion[1],float(lat)
 actualizarActividad()
 
 
-sm.sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas)
+sm.sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxmet,strpiezas,lat,lon,direccion)
 
 
 
