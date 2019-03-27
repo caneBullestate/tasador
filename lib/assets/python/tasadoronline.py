@@ -1,4 +1,4 @@
-import tasadorbot as tb
+import tasadorbot2 as tb
 import math
 import pymysql as mysql
 import math

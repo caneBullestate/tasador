@@ -15,6 +15,24 @@ import uf
 uf1=uf.getUf()
 
 
+def regresion(x_train,y_train,x_test):
+
+    regr = linear_model.LinearRegression()
+
+    regr.fit(x_train, y_train)
+
+    price=regr.intercept_
+    c=0
+
+    utilnegativa=regr.coef_[0]<-0.001
+    terrazanegativa = regr.coef_[1]<-0.001
+    estacionamientosnegativa =regr.coef_[4]<-0.001
+
+    for coef in regr.coef_:
+        price=price+coef*x_test[c]
+        c=c+1
+
+    return price,utilnegativa,terrazanegativa,estacionamientosnegativa
 
 def insertarTasacion(precio,preciomin,preciomax,id):
     sql = "UPDATE tasaciones SET precio='"+str(precio)+"',preciomin='"+str(preciomin)+"',preciomax='"+str(preciomax)+"' WHERE id='"+str(id)+"'"
@@ -65,6 +83,7 @@ def precio_from_portalinmobiliario(id2):
 
 def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacionamientos):
 
+
     data = from_portalinmobiliario()
     distanciat0=[]
     distanciat1=[]
@@ -74,8 +93,6 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
     distanciat3_2=[]
     distanciat4_1=[]
     distanciat4_2=[]
-    distanciat5_1=[]
-    distanciat5_2=[]
     k0=[0]*14
     k1=[0]*14
     k21=[0]*14
@@ -84,8 +101,6 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
     k32=[0]*14
     k41=[0]*14
     k42=[0]*14
-    k51=[0]*14
-    k52=[0]*14
 
     for j in data:
         # i3=op, i4=tipo, i5=precio, i6=dorms, i7=baños, i12= estacionamientos i8=util, i9=total
@@ -99,7 +114,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
             distance= 2*r*asin(sqrt(sin(c*(lat2-lat1)/2)**2 + cos(c*lat1)*cos(c*lat2)*sin(c*(long2-long1)/2)**2))
 
             #T0
-            if (distance < 1000) and (abs(util/j[8]-1)<0.1) and (abs(total/j[9]-1)<0.2) and (dormitorios==j[6]) and ((banos==j[7]) or tipo=='oficina') and (estacionamientos==j[12]) and ((k0[5]!=j[5]) or (k0[8]!=j[8]) or (k0[9]!=j[9]) or (k0[6]!=j[6]) or (k0[7]!=j[7]) or (k0[12]!=j[12])):
+            if (distance < 1000) and (abs(util/j[8]-1)<0.1) and (abs(total/j[9]-1)<0.2) and (dormitorios==j[6]) and (banos==j[7]) and (estacionamientos==j[12]) and ((k0[5]!=j[5]) or (k0[8]!=j[8]) or (k0[9]!=j[9]) or (k0[6]!=j[6]) or (k0[7]!=j[7]) or (k0[12]!=j[12])):
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat0.append(j)
@@ -108,7 +123,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
 
 
             #T1 REVISAR
-            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (dormitorios==j[6]) and ((banos==j[7]) or tipo=='oficina') and (estacionamientos==j[12]) and ((k1[5]!=j[5]) or (k1[8]!=j[8]) or (k1[9]!=j[9]) or (k1[6]!=j[6]) or (k1[7]!=j[7]) or (k1[12]!=j[12])) :
+            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (dormitorios==j[6]) and (banos==j[7]) and (estacionamientos==j[12]) and ((k1[5]!=j[5]) or (k1[8]!=j[8]) or (k1[9]!=j[9]) or (k1[6]!=j[6]) or (k1[7]!=j[7]) or (k1[12]!=j[12])) :
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat1.append(j)
@@ -116,7 +131,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
                 k1=j
 
             #T2.1
-            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (dormitorios==j[6]) and ((banos==j[7]) or tipo=='oficina') and (int(estacionamientos)>=(int(j[12])-1) and (int(estacionamientos)<=(int(j[12])+1))) and ((k21[5]!=j[5]) or (k21[8]!=j[8]) or (k21[9]!=j[9]) or (k21[6]!=j[6]) or (k21[7]!=j[7]) or (k21[12]!=j[12])) :
+            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (dormitorios==j[6]) and (banos==j[7]) and (int(estacionamientos)>=(int(j[12])-1) and (int(estacionamientos)<=(int(j[12])+1))) and ((k21[5]!=j[5]) or (k21[8]!=j[8]) or (k21[9]!=j[9]) or (k21[6]!=j[6]) or (k21[7]!=j[7]) or (k21[12]!=j[12])) :
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat2_1.append(j)
@@ -124,7 +139,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
                 k21=j
 
             #T2.2
-            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (dormitorios==j[6]) and ((banos==j[7]) or tipo=='oficina') and ((k22[5]!=j[5]) or (k22[8]!=j[8]) or (k22[9]!=j[9]) or (k22[6]!=j[6]) or (k22[7]!=j[7]) or (k22[12]!=j[12])) :
+            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (dormitorios==j[6]) and (banos==j[7]) and ((k22[5]!=j[5]) or (k22[8]!=j[8]) or (k22[9]!=j[9]) or (k22[6]!=j[6]) or (k22[7]!=j[7]) or (k22[12]!=j[12])) :
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat2_2.append(j)
@@ -132,7 +147,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
                 k22=j
 
             #T3.1
-            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (int(dormitorios)>=(int(j[6])-1) and (int(dormitorios)<=(int(j[6])+1))) and ((banos==j[7]) or tipo=='oficina') and ((k31[5]!=j[5]) or (k31[8]!=j[8]) or (k31[9]!=j[9]) or (k31[6]!=j[6]) or (k31[7]!=j[7]) or (k31[12]!=j[12])) :
+            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (int(dormitorios)>=(int(j[6])-1) and (int(dormitorios)<=(int(j[6])+1))) and (banos==j[7]) and ((k31[5]!=j[5]) or (k31[8]!=j[8]) or (k31[9]!=j[9]) or (k31[6]!=j[6]) or (k31[7]!=j[7]) or (k31[12]!=j[12])) :
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat3_1.append(j)
@@ -140,7 +155,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
                 k31=j
 
             #T3.2
-            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and ((banos==j[7]) or tipo=='oficina') and ((k32[5]!=j[5]) or (k32[8]!=j[8]) or (k32[9]!=j[9]) or (k32[6]!=j[6]) or (k32[7]!=j[7]) or (k32[12]!=j[12])):
+            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (banos==j[7]) and ((k32[5]!=j[5]) or (k32[8]!=j[8]) or (k32[9]!=j[9]) or (k32[6]!=j[6]) or (k32[7]!=j[7]) or (k32[12]!=j[12])):
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat3_2.append(j)
@@ -148,7 +163,7 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
                 k32=j
 
             #T4.1
-            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and ((int(banos)>=(int(j[7])-1) or tipo=='oficina') and (int(banos)<=(int(j[7])+1))) and ((k41[5]!=j[5]) or (k41[8]!=j[8]) or (k41[9]!=j[9]) or (k41[6]!=j[6]) or (k41[7]!=j[7]) or (k41[12]!=j[12])):
+            if (distance < 1000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and (int(banos)>=(int(j[7])-1) and (int(banos)<=(int(j[7])+1))) and ((k41[5]!=j[5]) or (k41[8]!=j[8]) or (k41[9]!=j[9]) or (k41[6]!=j[6]) or (k41[7]!=j[7]) or (k41[12]!=j[12])):
                 d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
                 j.append(d)
                 distanciat4_1.append(j)
@@ -162,25 +177,9 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
                 distanciat4_2.append(j)
                 j=j[:-1]
                 k42=j
-            #T5.1
-            if (distance < 2000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and ((k51[5]!=j[5]) or (k51[8]!=j[8]) or (k51[9]!=j[9]) or (k51[6]!=j[6]) or (k51[7]!=j[7]) or (k51[12]!=j[12])):
-                d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
-                j.append(d)
-                distanciat5_1.append(j)
-                j=j[:-1]
-                k51=j
-            #T5.2
-            if (distance < 3000) and (abs(util/j[8]-1)<0.2) and (abs(total/j[9]-1)<0.4) and ((k52[5]!=j[5]) or (k52[8]!=j[8]) or (k52[9]!=j[9]) or (k52[6]!=j[6]) or (k52[7]!=j[7]) or (k52[12]!=j[12])):
-                d=sqrt(distance*distance+(100*abs(util-j[8])*(100*abs(util-j[8])))+(100*abs(total-j[9])*(100*abs(total-j[9]))))
-                j.append(d)
-                distanciat5_2.append(j)
-                j=j[:-1]
-                k52=j
 
     t_actual="A+"
     cota=10
-
-
 
     if len(distanciat0)>=cota:
         distancia=distanciat0
@@ -203,22 +202,12 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
     elif len(distanciat4_1)>=cota:
         distancia=distanciat4_1
         t_actual="D+"
-    elif len(distanciat4_2)>=cota:
+    elif len(distanciat4_2)>=5:
         distancia=distanciat4_2
         t_actual="D-"
-    elif len(distanciat5_1)>=cota:
-        distancia=distanciat4_2
-        t_actual="E+"
-    elif len(distanciat5_2)>=cota:
-        distancia=distanciat4_2
-        t_actual="E-"
-
-    elif len(distanciat5_2)>=3:
-        distancia=distanciat4_2
-        t_actual="F+"
 
     else:
-        return 0,"F-",len(distanciat4_2),[]
+        return 0,"E",len(distanciat4_2),[]
 
     distancias=sorted(distancia,key=lambda x:x[14])
     try:
@@ -232,48 +221,59 @@ def calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacio
 
     y_train = []
     x_train = []
+
     for e in distancias:
-        x_train.append([e[8],e[9],e[6],e[7],e[12]])
-        y_train.append(e[5])
+        reg_terraza=(e[9]-e[8])
+        reg_util = e[8]
+        reg_dorms = e[6]
+        reg_banos = e[7]
+        reg_precio = e[5]
+        reg_estacionamientos = e[12]
+        x_train.append([reg_util,reg_terraza,reg_dorms,reg_banos,reg_estacionamientos,reg_util*reg_util,
+                        reg_util*reg_terraza,reg_util*reg_dorms,reg_util*reg_banos,reg_terraza*reg_terraza,reg_terraza*reg_dorms,
+                        reg_terraza*reg_banos,reg_dorms*reg_dorms,reg_dorms*reg_banos,reg_banos*reg_banos])
+        y_train.append(reg_precio)
 
     #y2_train=[]
     #y2_train.append(y_train)
     #y_train=y2_train
     x_train=np.array(x_train)
     y_train=np.array(y_train)
-    #x_train=np.transpose(x_train)
 
 
-    #print (x_train)
-    #print(x_train.shape)
-    #print (y_train)
-    #print(y_train.shape)
-
-    # Create linear regression object
-    regr = linear_model.LinearRegression()
-
-    # Train the model using the training sets
-    regr.fit(x_train, y_train)
-    #try:
-     #   print("constante: "+str(regr.intercept_)+" coeficientes: " +str(regr.coef_))
-    #except:
-     #   print("unable to print coef")
-    x_test = [util,total,dormitorios,banos,estacionamientos]
+    x_test = [util,(total-util),dormitorios,banos,estacionamientos,
+              util*util,util*(total-util),util*dormitorios,util*banos,
+              (total-util)*(total-util),(total-util)*dormitorios,(total-util)*banos,
+              dormitorios*dormitorios,dormitorios*banos,banos*banos]
     x_test=np.array(x_test)
     x_test=np.transpose(x_test)
     # Make predictions using the testing set
 
-    price=regr.intercept_
-    c=0
-    for coef in regr.coef_:
-        price=price+coef*x_test[c]
-        c=c+1
+    price,utilnegativo,terrazanegativo,estacionamientosnegativo=regresion(x_train,y_train,x_test)
 
-    #print(price)
-    cota=len(distancias)+1
-#print("y_pred = " + str(y_pred))
-# The coefficients
-#print('Coefficients: \n', regr.coef_)
+    for dato in x_train:
+        if utilnegativo:
+            dato[0] = float(0.00000)
+            dato[5] = float(0.00000)
+            dato[6] = float(0.00000)
+            dato[7] = float(0.00000)
+            dato[8] = float(0.00000)
+
+
+        if terrazanegativo:
+            dato[1]=float(0.00000)
+            dato[6]=float(0.00000)
+            dato[9]=float(0.00000)
+            dato[10]=float(0.00000)
+            dato[11]=float(0.00000)
+
+
+        if estacionamientosnegativo:
+            dato[4]=float(0.0000)
+
+
+    if utilnegativo or terrazanegativo or estacionamientosnegativo:
+        price, utilnegativo, terrazanegativo, estacionamientosnegativo = regresion(x_train, y_train, x_test)
 
     try:
         price = int(price/uf.getUf())
@@ -296,4 +296,3 @@ if __name__ == "__main__":
     estacionamientos=2
 
     precio,confianza,nrProps,links = calcularTasacion(operacion,tipo,lat,lon,util,total,dormitorios,banos,estacionamientos)
-
