@@ -57,7 +57,7 @@ def sendMail(tasacion,precio,nivel,nrcomp,minmet,maxmet,piezas,strminmet,strmaxm
 
     server = smtplib.SMTP_SSL('smtp.zoho.com', 465)
     #server.starttls()
-    server.login(fromaddr, "kpyss6s8")
+    server.login(fromaddr, "Bullestate.123")
     text = msg.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
